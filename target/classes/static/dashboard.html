@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Dual Access Control</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>DAC System</h2>
+            </div>
+            
+            <ul class="nav-links">
+                <li class="nav-item">
+                    <a class="nav-link active" data-tab="my-files">
+                        <i class="fas fa-folder"></i> My Files
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-tab="all-files">
+                        <i class="fas fa-globe"></i> Enterprise Files
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-tab="upload">
+                        <i class="fas fa-cloud-upload-alt"></i> Upload New
+                    </a>
+                </li>
+            </ul>
+
+            <div class="user-profile">
+                <div class="avatar" id="userInitial">A</div>
+                <div class="user-info">
+                    <p id="userNameDisplay">Admin User</p>
+                    <span id="userRoleDisplay">Administrator</span>
+                </div>
+            </div>
+            <button class="btn btn-danger btn-sm mt-3" id="logoutBtn" style="width: 100%;">
+                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+            </button>
+        </aside>
+
+        <!-- Main Content (Dynamic) -->
+        <main class="main-content">
+            <!-- Tab: Enteprise / My Files / Upload -->
+            <div class="top-bar">
+                <h1 class="page-title" id="pageTitle">My Secure Files</h1>
+                <button class="btn btn-primary" id="topUploadBtn" onclick="switchTab('upload')">
+                    <i class="fas fa-plus"></i> Upload File
+                </button>
+            </div>
+
+            <!-- Upload Section -->
+            <section id="uploadSection" class="hidden">
+                <div class="glass-panel">
+                    <h3 class="mb-4">Secure File Upload</h3>
+                    
+                    <form id="uploadForm">
+                        <div class="upload-area" id="dropZone">
+                            <i class="fas fa-file-upload upload-icon"></i>
+                            <h4 class="upload-text">Drag & Drop your file here</h4>
+                            <p class="upload-hint">or click to browse from your computer</p>
+                            <input type="file" id="fileInput" name="file" required>
+                            <p id="selectedFileName" class="mt-2 text-primary" style="font-weight: 600;"></p>
+                        </div>
+                        
+                        <div class="form-group mt-4">
+                            <label for="fileDescription">File Description / Notes</label>
+                            <input type="text" id="fileDescription" name="description" class="form-control" placeholder="Confidential financial report Q3..." required>
+                        </div>
+                        
+                        <div class="actions mt-4" style="justify-content: flex-end;">
+                            <button type="submit" class="btn btn-primary" id="uploadBtnSubmit">
+                                <span><i class="fas fa-lock"></i> Encrypt & Upload</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Files List Section -->
+            <section id="filesListSection">
+                <div class="glass-panel">
+                    <div class="table-responsive">
+                        <table id="filesTable">
+                            <thead>
+                                <tr>
+                                    <th>File Name</th>
+                                    <th>Description</th>
+                                    <th>Owner</th>
+                                    <th>Upload Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="filesTableBody">
+                                <!-- Data will be loaded dynamically here -->
+                                <tr>
+                                    <td colspan="5" class="text-center">Loading files...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        // Ensure to run init on dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            if(!window.isAppInitialized) {
+                // Quick inline check for token auth before app.js fires
+                const token = localStorage.getItem('dac_token');
+                if (!token) {
+                    window.location.href = '/';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
