@@ -82,6 +82,24 @@ document.addEventListener('DOMContentLoaded', () => {
             loginForm.classList.remove('hidden');
         });
 
+        // Toggle Password Visibility
+        document.querySelectorAll('.toggle-password').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const inputId = this.getAttribute('id') === 'toggleLoginPassword' ? 'loginPassword' : 'regPassword';
+                const input = document.getElementById(inputId);
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    this.classList.remove('fa-eye');
+                    this.classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    this.classList.remove('fa-eye-slash');
+                    this.classList.add('fa-eye');
+                }
+            });
+        });
+
         // Handle Login
         document.getElementById('loginFormElement').addEventListener('submit', async (e) => {
             e.preventDefault();
